@@ -1,0 +1,321 @@
+SQL> connect
+Enter user-name: SEA23
+Enter password:
+Connected.
+SQL> create table employee (empid int not null Primary Key, name varchar2(10), emailid varchar2(25), salary int, gender varchar2(10), city varchar2(10), state varchar2(10), country varchar2(15));
+
+Table created.
+
+SQL> insert into employee values(1, 'ram', 'ram@gamil.com', 12345, 'male', 'mumbai', 'maha', 'india');
+
+1 row created.
+
+SQL> insert into employee values(2, 'shyam', 'shyam@gamil.com', 54321, 'male', 'dama', 'kanta', 'india');
+
+1 row created.
+
+SQL> insert into employee values(3, 'sita', 'sita@gamil.com', 68461, 'female', 'ayodhya', 'bhu', 'bharat');
+
+1 row created.
+
+SQL> insert into employee values(4, 'gita', 'gita@gamil.com', 88461, 'female', 'fahya', 'lok', 'bharat');
+
+1 row created.
+
+SQL> insert into employee values(5, 'haha', 'haha@gamil.com', 12345, 'male', 'mumbai', 'maha', 'india');
+
+1 row created.
+
+SQL> select * from employee;
+
+     EMPID NAME       EMAILID                       SALARY GENDER     CITY
+---------- ---------- ------------------------- ---------- ---------- ----------
+STATE      COUNTRY
+---------- ---------------
+         1 ram        ram@gamil.com                  12345 male       mumbai
+maha       india
+
+         2 shyam      shyam@gamil.com                54321 male       dama
+kanta      india
+
+         3 sita       sita@gamil.com                 68461 female     ayodhya
+bhu        bharat
+
+
+     EMPID NAME       EMAILID                       SALARY GENDER     CITY
+---------- ---------- ------------------------- ---------- ---------- ----------
+STATE      COUNTRY
+---------- ---------------
+         4 gita       gita@gamil.com                 88461 female     fahya
+lok        bharat
+
+         5 haha       haha@gamil.com                 12345 male       mumbai
+maha       india
+
+
+
+
+
+
+
+
+
+SQL> create table dept (dept_key int not null Primary Key, name varchar2(10), noofemployees int, description varchar2(30));
+
+Table created.
+
+SQL> insert into dept values (101, 'hr', 10, 'employee welfare');
+
+1 row created.
+
+SQL> insert into dept values (102, 'sce', 20, 'tech development');
+
+1 row created.
+
+SQL> insert into dept values (103, 'logistics', 5, 'transport management');
+
+1 row created.
+
+SQL> insert into dept values (104, 'finance', 15, 'finance managemnent');
+
+1 row created.
+
+SQL> insert into dept values (105, 'marketing', 5, 'fund raisers');
+
+1 row created.
+
+SQL> select * from dept;
+
+  DEPT_KEY NAME       NOOFEMPLOYEES DESCRIPTION
+---------- ---------- ------------- ------------------------------
+       101 hr                    10 employee welfare
+       102 sce                   20 tech development
+       103 logistics              5 transport management
+       104 finance               15 finance managemnent
+       105 marketing              5 fund raisers
+
+
+
+
+
+SQL> create table roles (role_key int not null Primary Key, name varchar2(10), description varchar2(30));
+
+Table created.
+
+SQL> insert into roles values (11, 'Head', 'Team Management');
+
+1 row created.
+
+SQL> insert into roles values (12, 'Vice-Head', 'Team Management');
+
+1 row created.
+
+SQL> insert into roles values (13, 'Senior', 'Lead');
+
+1 row created.
+
+SQL> insert into roles values (14, 'Employee', 'work');
+
+1 row created.
+
+SQL> insert into roles values (15, 'intern', 'learn');
+
+1 row created.
+
+SQL> select * from roles;
+
+  ROLE_KEY NAME       DESCRIPTION
+---------- ---------- ------------------------------
+        11 Head       Team Management
+        12 Vice-Head  Team Management
+        13 Senior     Lead
+        14 Employee   work
+        15 intern     learn
+
+
+
+
+
+SQL> create table time (time_key int not null Primary Key, day varchar2(10), month varchar2(10), year int, joiningdate int);
+
+Table created.
+
+SQL> insert into time values (01, 'Mon', 'jan', 2023, 12);
+
+1 row created.
+
+SQL> insert into time values (02, 'Tues', 'feb', 2024, 20);
+
+1 row created.
+
+SQL> insert into time values (03, 'Sun', 'July', 2020, 25);
+
+1 row created.
+
+SQL> insert into time values (04, 'Sat', 'June', 2021, 10);
+
+1 row created.
+
+SQL> insert into time values (05, 'Fri', 'sep', 2016, 30);
+
+1 row created.
+
+SQL> select * from time;
+
+  TIME_KEY DAY        MONTH            YEAR JOININGDATE
+---------- ---------- ---------- ---------- -----------
+         1 Mon        jan              2023          12
+         2 Tues       feb              2024          20
+         3 Sun        July             2020          25
+         4 Sat        June             2021          10
+         5 Fri        sep              2016          30
+
+
+
+
+
+
+SQL> CREATE TABLE fact (
+  2      empid INT,
+  3      dept_key INT,
+  4      role_key INT,
+  5      time_key INT,
+  6      noofhours INT,
+  7      noofleaves INT,
+  8      CONSTRAINT empid FOREIGN KEY (empid) REFERENCES employee(empid),
+  9      CONSTRAINT dept_key FOREIGN KEY (dept_key) REFERENCES dept(dept_key),
+ 10      CONSTRAINT role_key FOREIGN KEY (role_key) REFERENCES roles(role_key),
+ 11      CONSTRAINT time_key FOREIGN KEY (time_key) REFERENCES time(time_key)
+ 12  );
+
+Table created.
+
+SQL> INSERT INTO fact (empid, dept_key, role_key, time_key, noofhours, noofleaves) VALUES (1, 101, 11, 1, 40, 2);
+
+1 row created.
+
+SQL> INSERT INTO fact (empid, dept_key, role_key, time_key, noofhours, noofleaves) VALUES (2, 102, 13, 2, 35, 1);
+
+1 row created.
+
+SQL> INSERT INTO fact (empid, dept_key, role_key, time_key, noofhours, noofleaves) VALUES (3, 103, 14, 3, 30, 0);
+
+1 row created.
+
+SQL> INSERT INTO fact (empid, dept_key, role_key, time_key, noofhours, noofleaves) VALUES (4, 104, 12, 4, 45, 3);
+
+1 row created.
+
+SQL> INSERT INTO fact (empid, dept_key, role_key, time_key, noofhours, noofleaves) VALUES (5, 105, 15, 5, 20, 1);
+
+1 row created.
+
+SQL> SELECT * FROM fact;
+
+     EMPID   DEPT_KEY   ROLE_KEY   TIME_KEY  NOOFHOURS NOOFLEAVES
+---------- ---------- ---------- ---------- ---------- ----------
+         1        101         11          1         40          2
+         2        102         13          2         35          1
+         3        103         14          3         30          0
+         4        104         12          4         45          3
+         5        105         15          5         20          1
+
+
+
+
+2. Write and execute any 5 analytical queries to evaluate business performance make use of clauses like group by, having clause, different joins, nested aggregate function.
+
+1. Total Hours Worked by Each Department
+
+SQL> SELECT d.name AS department_name,
+  2         SUM(f.noofhours) AS total_hours_worked
+  3  FROM fact f
+  4  JOIN dept d ON f.dept_key = d.dept_key
+  5  GROUP BY d.name;
+
+DEPARTMENT TOTAL_HOURS_WORKED
+---------- ------------------
+hr                         40
+finance                    45
+logistics                  30
+sce                        35
+marketing                  20
+
+2. Average Hours Worked and Leaves Taken by Role
+
+SQL> SELECT r.name AS role_name,
+  2         AVG(f.noofhours) AS average_hours_worked,
+  3         AVG(f.noofleaves) AS average_leaves_taken
+  4  FROM fact f
+  5  JOIN roles r ON f.role_key = r.role_key
+  6  GROUP BY r.name;
+
+ROLE_NAME  AVERAGE_HOURS_WORKED AVERAGE_LEAVES_TAKEN
+---------- -------------------- --------------------
+Employee                     30                    0
+intern                       20                    1
+Vice-Head                    45                    3
+Head                         40                    2
+Senior                       35                    1
+
+
+
+3. Departments with More Than 15 Hours Worked
+
+SQL> SELECT d.name AS department_name,
+  2         SUM(f.noofhours) AS total_hours_worked
+  3  FROM fact f
+  4  JOIN dept d ON f.dept_key = d.dept_key
+  5  GROUP BY d.name
+  6  HAVING SUM(f.noofhours) > 15;
+
+DEPARTMENT TOTAL_HOURS_WORKED
+---------- ------------------
+hr                         40
+finance                    45
+logistics                  30
+sce                        35
+marketing                  20
+
+4. Role-wise Total Hours and Average Leaves Taken
+
+SQL> SELECT r.name AS role_name,
+  2         SUM(f.noofhours) AS total_hours_worked,
+  3         AVG(f.noofleaves) AS average_leaves_taken
+  4  FROM fact f
+  5  JOIN roles r ON f.role_key = r.role_key
+  6  GROUP BY r.name
+  7  ORDER BY total_hours_worked DESC;
+
+ROLE_NAME  TOTAL_HOURS_WORKED AVERAGE_LEAVES_TAKEN
+---------- ------------------ --------------------
+Vice-Head                  45                    3
+Head                       40                    2
+Senior                     35                    1
+Employee                   30                    0
+intern                     20                    1
+
+
+
+
+
+
+5. Employee with the Most Hours Worked in the Last Year
+
+SQL> SELECT employee_name, total_hours_worked
+  2  FROM (
+  3      SELECT e.name AS employee_name,
+  4             SUM(f.noofhours) AS total_hours_worked
+  5      FROM fact f
+  6      JOIN employee e ON f.empid = e.empid
+  7      JOIN time t ON f.time_key = t.time_key
+  8      WHERE t.year = 2023
+  9      GROUP BY e.name
+ 10      ORDER BY total_hours_worked DESC
+ 11  )
+ 12  WHERE ROWNUM = 1;
+
+EMPLOYEE_N TOTAL_HOURS_WORKED
+---------- ------------------
+ram                        40
+
