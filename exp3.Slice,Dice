@@ -1,0 +1,200 @@
+SQL> create table Doctor(DoctorID int not null Primary Key, DoctorName varchar2(10), Specialty varchar2(15), Gender varchar2(10), Experience int);
+
+Table created.
+
+SQL>
+SQL> insert into Doctor values(1, 'Ram', 'Cardiologist', 'Male', 10);
+
+1 row created.
+
+SQL> select * from Doctor;
+
+  DOCTORID DOCTORNAME SPECIALTY       GENDER     EXPERIENCE
+---------- ---------- --------------- ---------- ----------
+         1 Ram        Cardiologist    Male               10
+         2 Lakshman   ENT             Male               15
+         3 Sita       Pediatrician    Female              5
+         4 Hanuman    Dietician       Male               20
+         5 Ravan      Psychologist    Male               30
+
+SQL> create table Patient(PatientID int not null Primary key, PatientName varchar2(10), Age int, Gender varchar2(10), MedicalHistory varchar2(10));
+
+Table created.
+
+SQL> insert into Patient values(1, 'Indra', 30, 'Male', 'Yes');
+
+1 row created.
+
+SQL> select * from Patient;
+
+ PATIENTID PATIENTNAM        AGE GENDER     MEDICALHIS
+---------- ---------- ---------- ---------- ----------
+         1 Indra              30 Male       Yes
+         2 Indrasen           40 Male       No
+         3 Surpanakha         30 Female     Yes
+         4 Akshay             25 Male       No
+         5 Garuda             50 Male       Yes
+
+SQL> create table MedicalRecords(MedicalRecordID int not null Primary key, Diagnosis varchar2(15), Treatment varchar2(15), Medication varchar2(5), PatientID int, DoctorID int, CONSTRAINT PatientID FOREIGN KEY (PatientID) REFERENCES Patient(PatientID),CONSTRAINT DoctorID FOREIGN KEY (DoctorID) REFERENCES Doctor(DoctorID));
+
+Table created.
+
+
+SQL> insert into MedicalRecords values(101, 'heart failure', 'Surgery', 'Yes', 1, 1);
+
+1 row created.
+
+SQL> select * from MedicalRecords;
+
+MEDICALRECORDID DIAGNOSIS TREATMENT       MEDIC  PATIENTID   DOCTORID
+--------------- --------------- ---------------        -----          ---------- ----------
+            101 heart failure   Surgery                Yes                1          1
+            102 Sinus              Nose Expansion  Yes                2          2
+            103 Pregnancy      C-Section             No                3          3
+            104 Overweight    Diet                     Yes                4          4
+            105 Depression     Medication          No                 5          5
+
+SQL> create table Admin(AdminID int, AdminName varchar2(15), Role varchar2(15), Gender varchar2(10), Department varchar2(15));
+
+Table created.
+
+SQL> insert into Admin values(1, 'Vasudev', 'Director', 'Male', 'Management');
+
+1 row created.
+
+SQL> select * from Admin;
+
+   ADMINID ADMINNAME       ROLE            GENDER     DEPARTMENT
+---------- --------------- --------------- ---------- ---------------
+         1 Vasudev         Director        Male       Management
+         2 Brahma          Owner           Male       Management
+         3 Mahadev         CoOwner         Male       Management
+         4 Lakshmi         Financer        Female     Finance
+         5 Saraswati       SeniorDocter    Female     Medical
+
+
+
+
+
+SQL> CREATE TABLE HospitalVisits (
+  2      VisitID INT NOT NULL PRIMARY KEY,
+  3      DoctorID INT,
+  4      PatientID INT,
+  5      MedicalRecordID INT,
+  6      AdminID INT,
+  7      VisitDate DATE,
+  8      Duration INT,
+  9      Cost INT,
+ 10      CONSTRAINT Doctor FOREIGN KEY (DoctorID) REFERENCES Doctor(DoctorID),
+ 11      CONSTRAINT Patient FOREIGN KEY (PatientID) REFERENCES Patient(PatientID),
+ 12      CONSTRAINT MedicalRecord FOREIGN KEY (MedicalRecordID) REFERENCES MedicalRecords(MedicalRecordID),
+ 13      CONSTRAINT Admin FOREIGN KEY (AdminID) REFERENCES Admin(AdminID)
+ 14  );
+
+Table created.
+
+SQL> insert into HospitalVisits values(11,1,1,101,1,'04-Mar-2024',2,20000);
+
+1 row created.
+
+SQL> select * from HospitalVisits;
+
+   VISITID   DOCTORID  PATIENTID MEDICALRECORDID    ADMINID VISITDATE   DURATION
+---------- ---------- ---------- --------------- ---------- --------- ----------
+      COST
+----------
+        11          1          1             101          1 04-MAR-24          2
+     20000
+
+        12          2          2             102          2 24-JUN-24          5
+     35000
+
+        13          3          3             103          3 14-AUG-24          4
+     55000
+
+VISITID   DOCTORID  PATIENTID MEDICALRECORDID ADMINID VISITDATE   DURATION
+---------- ---------- ---------- --------------- ---------- --------- ----------
+      COST
+----------
+        14          4          4             104          4 29-OCT-24          4
+     15000
+
+        15          5          5             105          5 01-OCT-24          5
+      5000
+
+
+How many hospital visits were recorded in the fact table?
+
+SQL> SELECT COUNT(*) AS TotalVisits
+  2  FROM HospitalVisits;
+
+TOTALVISITS
+-----------
+          5
+
+What is the total cost of all visits recorded in the fact table?
+
+SQL> SELECT SUM(Cost) AS TotalCost
+  2  FROM HospitalVisits;
+
+ TOTALCOST
+----------
+    130000
+
+How many unique patients visited the hospital?
+
+SQL> SELECT COUNT(DISTINCT PatientID) AS UniquePatients
+  2  FROM HospitalVisits;
+
+UNIQUEPATIENTS
+--------------
+             5
+
+List all the doctors along with their specialties.
+
+SQL> SELECT DoctorID, DoctorName, Specialty
+  2  FROM Doctor;
+
+  DOCTORID DOCTORNAME SPECIALTY
+---------- ---------- ---------------
+         1 Ram        Cardiologist
+         2 Lakshman   ENT
+         3 Sita       Pediatrician
+         4 Hanuman    Dietician
+         5 Ravan      Psychologist
+
+
+
+What is the average duration of hospital visits?
+
+SQL> SELECT AVG(Duration) AS AverageDuration
+  2  FROM HospitalVisits;
+
+AVERAGEDURATION
+---------------
+              4
+
+Show the total cost of visits for each doctor's specialty, with a grand total for all specialties combined
+
+
+SQL> SELECT d.Specialty, SUM(hv.Cost) AS TotalCost
+  2  FROM HospitalVisits hv
+  3  JOIN Doctor d ON hv.DoctorID = d.DoctorID
+  4  GROUP BY d.Specialty;
+
+SPECIALTY        TOTALCOST
+--------------- ----------
+Pediatrician         55000
+Cardiologist         20000
+ENT                  35000
+Dietician            15000
+Psychologist          5000
+
+SQL> SELECT 'Grand Total' AS Specialty, SUM(hv.Cost) AS TotalCost
+  2  FROM HospitalVisits hv;
+
+SPECIALTY    TOTALCOST
+----------- ----------
+Grand Total     130000
+
+
