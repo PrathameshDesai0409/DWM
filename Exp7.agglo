@@ -1,0 +1,33 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
+
+# Given data points
+data = np.array([[18], [22], [25], [27], [42], [43]])
+# User-defined number of clusters
+num_clusters = int(input("Enter the number of clusters you want to form: "))
+
+# Perform hierarchical/agglomerative clustering using single linkage
+linked = linkage(data, method='single')
+
+# Create clusters
+clusters = fcluster(linked, num_clusters, criterion='maxclust')
+
+# Plotting the results
+plt.figure(figsize=(10, 7))
+dendrogram(linked, orientation='top', labels=[str(x[0]) for x in data], distance_sort='descending',
+show_leaf_counts=True)
+plt.title('Dendrogram (Single Linkage)')
+plt.xlabel('Data Points')
+plt.ylabel('Distance')
+plt.axhline(y=2, color='r', linestyle='--') # Adjust as necessary for your dataset
+plt.show()
+
+# Scatter plot of clustered data (1D data)
+plt.figure(figsize=(10, 3))
+plt.scatter(data, np.zeros_like(data), c=clusters, cmap='rainbow', marker='o')
+plt.title('Agglomerative Clustering Results (Single Linkage)')
+plt.xlabel('Data Points')
+plt.yticks([]) # Hide y-axis ticks as it's 1D
+plt.grid(True)
+plt.show()
