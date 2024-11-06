@@ -1,0 +1,129 @@
+1. Binning
+a) Sort the array of given data sets.
+b) Divides the range into N intervals, each containing the approximately same
+number of samples (Equal-depth partitioning).
+c) Store mean/boundaries in each row.
+
+CODE:
+import numpy as np
+ 
+# Function to get bin boundaries
+def bin_boundaries(bins):
+	boundaries = []
+	boundary_bins = []
+	for bin in bins:
+    	lower_bound = int(bin[0])
+    	upper_bound = int(bin[-1])
+        boundary_bins.append([lower_bound if abs(x - lower_bound) <= abs(x - upper_bound) else upper_bound for x in bin])
+	return boundary_bins
+ 
+# Function to perform binning by mean
+def binning_by_mean(bins):
+	mean_bins = []
+	for bin in bins:
+    	mean_value = np.mean(bin)
+        mean_bins.append([float(mean_value)] * len(bin))  # Converting to float for clean output
+	return mean_bins
+ 
+# Function to perform binning by median
+def binning_by_median(bins):
+	median_bins = []
+	for bin in bins:
+    	median_value = np.median(bin)
+        median_bins.append([float(median_value)] * len(bin))  # Converting to float for clean output
+	return median_bins
+ 
+# Function to divide data into equal-depth bins
+def create_bins(data, num_bins):
+	sorted_data = sorted(data)
+	bins = np.array_split(sorted_data, num_bins)
+	return sorted_data, bins
+ 
+# Main function
+def main():
+	# Input dataset from user
+	data = list(map(int, input("Enter the dataset (space-separated): ").split()))
+  
+	# Input number of bins
+	num_bins = int(input("Enter the number of bins: "))
+  
+	# Sorting and binning
+	sorted_data, bins = create_bins(data, num_bins)
+  
+	# Binning by mean, median, and boundaries
+	mean_binned = binning_by_mean(bins)
+	median_binned = binning_by_median(bins)
+	boundaries_binned = bin_boundaries(bins)
+  
+	# Output results
+    print("\nOriginal Dataset:", data)
+	print("Sorted Dataset:", sorted_data)
+    print("\nInitial Bins:")
+	for i, bin in enumerate(bins, 1):
+        print(f"Bin {i}: {bin.tolist()}")
+  
+    print("\nBinning by Mean:")
+	for i, bin in enumerate(mean_binned, 1):
+        print(f"Bin {i}: {bin}")
+  
+    print("\nBinning by Median:")
+	for i, bin in enumerate(median_binned, 1):
+        print(f"Bin {i}: {bin}")
+  
+    print("\nBinning by Boundaries:")
+	for i, bin in enumerate(boundaries_binned, 1):
+        print(f"Bin {i}: {bin}")
+ 
+# Corrected name check
+if __name__ == "__main__":
+	main()
+
+
+2. Any data visualization method in Python
+CODE:
+import matplotlib.pyplot as plt
+ 
+# Function to plot bar chart
+def plot_bar_chart(data):
+	# Creating labels for the data
+	labels = [f"Element {i+1}" for i in range(len(data))]
+  
+	# Plotting the bar chart
+    plt.figure(figsize=(8, 6))
+	plt.bar(labels, data, color='blue')
+	plt.xlabel('Data Points')
+    plt.ylabel('Values')
+	plt.title('Bar Chart of User Input Data')
+	plt.show()
+ 
+# Function to plot histogram
+def plot_histogram(data):
+	# Plotting the histogram
+    plt.figure(figsize=(8, 6))
+	plt.hist(data, bins=5, color='green', edgecolor='black')
+	plt.xlabel('Value Range')
+    plt.ylabel('Frequency')
+    plt.title('Histogram of User Input Data')
+	plt.show()
+ 
+def main():
+	# Taking input from the user
+	data = list(map(int, input("Enter the dataset (space-separated): ").split()))
+  
+	# Visualizing the data
+    print("\nCreating Bar Chart...")
+    plot_bar_chart(data)
+  
+    print("\nCreating Histogram...")
+    plot_histogram(data)
+ 
+# Corrected name check
+if __name__ == "__main__":
+	main()
+ 
+
+
+
+
+
+
