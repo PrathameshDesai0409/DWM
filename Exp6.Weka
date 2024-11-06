@@ -1,0 +1,13 @@
+@relation student_details 
+
+@attribute name {Shravani, Ishita, Janhvi,Arya}
+@attribute pid {1,2,3,4} 
+@attribute division{a,b,c,d} 
+
+@data 
+Shravani,1,a
+Ishita,2,b
+Janhvi,3,c
+Arya,4,d
+
+save it as student_details.arff
